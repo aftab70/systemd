@@ -50,3 +50,11 @@ StandardError=syslog
 SyslogIdentifier=awesome_micro_service
 [Install]
 WantedBy=multi-user.target
+
+sudo chmod 755 /lib/systemd/system/awesome_micro_service.service
+
+
+sudo systemctl enable awesome_micro_service
+sudo service awesome_micro_service start
+
+journalctl -f -u awesome_micro_service
