@@ -1,0 +1,30 @@
+
+# Step 1 – Create Service File 
+# create a service file for the systemd as following. The file must have .service extension under /lib/systemd/system/ directory
+
+$ sudo vi /lib/systemd/system/service_name_here.service
+
+# and add the following content in it. Change Python script filename ad location. Also update the Description.
+
+[Unit]
+Description=service_name_here.service
+After=multi-user.target
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/bin/dummy_service.py
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target
+
+# Save and exit from the editor.
+
+# Step 3 – Enable Newly Added Service and start the services.
+
+$ sudo chmod +x /lib/systemd/system/service_name_here.service
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable service_name_here.service
+$ sudo systemctl start service_name_here.service
+$ sudo systemctl status service_name_here.service
