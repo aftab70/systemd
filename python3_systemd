@@ -28,3 +28,19 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl enable service_name_here.service
 $ sudo systemctl start service_name_here.service
 $ sudo systemctl status service_name_here.service
+
+
+[Unit]
+Description=notification.service
+After=multi-user.target
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/aftab/OT-Microservices/notification/notification_api.py
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target
+
+
