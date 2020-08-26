@@ -1,60 +1,27 @@
+# Workign directory
+
+vim /lib/systemd/system/attendance.service
+
 [Unit]
-Description=Sleep service
-ConditionPathExists=/home/ubuntu/work/src/sleepservice/sleepservice
-After=network.target
- 
+Description=Attendance Module
 [Service]
-Type=simple
-User=sleepservice
-Group=sleepservice
-LimitNOFILE=1024
-
+User=aftab
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/home/aftab/OT-Microservices/attendance
+#path to executable.
+#executable is a bash script which calls jar file
+ExecStart=/home/aftab/OT-Microservices/attendance/attendance.sh
+SuccessExitStatus=143
+TimeoutStopSec=10
 Restart=on-failure
-RestartSec=10
-startLimitIntervalSec=60
-
-WorkingDirectory=/home/ubuntu/work/src/sleepservice
-ExecStart=/home/ubuntu/work/src/sleepservice/sleepservice --name=foo
-
-# make sure log directory exists and owned by syslog
-PermissionsStartOnly=true
-ExecStartPre=/bin/mkdir -p /var/log/sleepservice
-ExecStartPre=/bin/chown syslog:adm /var/log/sleepservice
-ExecStartPre=/bin/chmod 755 /var/log/sleepservice
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=sleepservice
- 
+RestartSec=5
 [Install]
 WantedBy=multi-user.target
 
+vim attendance.sh
 
-[Unit]
-Description=Awesome Micro Service
-ConditionPathExists=/home/user/service/awesome_micro_service
-After=network.target
-[Service]
-Type=simple
-User=<service_user>
-Group=<service_group>
-LimitNOFILE=1024
-Restart=on-failure
-RestartSec=10
-startLimitIntervalSec=60
-Environment="SECRET=shhhh"
-WorkingDirectory=/home/user/service
-ExecStart=/home/user/service/path_to_micro_service
-PermissionsStartOnly=true
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=awesome_micro_service
-[Install]
-WantedBy=multi-user.target
+#!/bin/bash
 
-sudo chmod 755 /lib/systemd/system/awesome_micro_service.service
-
-
-sudo systemctl enable awesome_micro_service
-sudo service awesome_micro_service start
-
-journalctl -f -u awesome_micro_service
+export CONFIG_FILE=./config.yaml
+./attendance
